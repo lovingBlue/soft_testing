@@ -1,3 +1,11 @@
 p2p网络
 分布式系统
 倒排索引
+burp suite (抓包)
+json Schema 验证json格式
+restAssure(Java 请求http)
+Junit5(支持动态断言)
+Swagger
+curl
+pyenv
+hamcrest/pyHamcreast
