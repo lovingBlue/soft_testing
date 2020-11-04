@@ -1,0 +1,4 @@
+1.运行pytest报错：attrib() got an unexpected keyword argument 'convert'
+  解决办法：pytest似乎将包attrs作为依赖项。attrs==19.2.0在2019-10-01 17:00 UTC附近释放。这似乎导致了上述问题。切换回attrs==19.1.0可以解决问题。只需执行以下操作：
+  pip install attrs==19.1.0
+  
