@@ -5,10 +5,19 @@ gunicorn别名独角兽，是一个Unix上被广泛使用的高性能的 Python 
 
 安装：使用命令 pip install gunicorn
 
-简单使用
-gunicorn job_broker.wsgi -b 0.0.0.0:8000
-注意：在manage.py的同级目录下使用该命令；job_broker为项目名
+命令运行
+gunicorn job_broker.wsgi -b 0.0.0.0:8000 -w 4 --threads 2
+注意：在manage.py的同级目录下使用该命令；job_broker为项目名;-b 参数代表监听；-w 参数代表进程数；--threads 参数代表线程数
 
-配置文件
+配置文件运行
+gunicorn job_broker.wsgi -c gunicorn_config.py
+
+简单配置文件编写
+import multiprocessing
+bind = "127.0.0.1:8000"
+workers = multiprocessing.cpu_count()*2 + 1   # 也可直接定义，范围一般为2-4
+threads = 2
+errorlog = "/users/dandanzhan/Workspace/job_broker/src/gunicorn.error.log"
+loglevel = 'info'
 
 
