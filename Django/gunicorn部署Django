@@ -1,1 +1,14 @@
-##
+gunicorn简介
+
+gunicorn别名独角兽，是一个Unix上被广泛使用的高性能的 Python WSGI Server。
+文档：https://docs.gunicorn.org/en/latest/install.html
+
+安装：使用命令 pip install gunicorn
+
+简单使用
+gunicorn job_broker.wsgi -b 0.0.0.0:8000
+注意：在manage.py的同级目录下使用该命令；job_broker为项目名
+
+配置文件
+
+
