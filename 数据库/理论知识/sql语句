@@ -1,0 +1,74 @@
+mysql连接命令
+mysql -u username -p -h myserver -P 3306;
+show databases;
+use crashcourse;
+show tables;
+show columns from customers;
+show grants;用来显示授予用户的安全权限；
+show CREATE databases;用来显示创建特定数据库的MySQL语句
+help show；
+
+搜索
+select distinct vend_id from products；
+select pro_name from products limit 5；返回不多于5行
+select pro_name from products limit 3，5；从行3（第四行）开始，最多5行
+select pro_name from products limit 5 offset 3；从行3（第四行）开始取5行
+
+排序
+select pro_name,pro_id,pro_price from products order by pro_price,pro_name desc;
+
+条件搜索
+select cust_id from customers where cust_email is null;
+
+Like通配符
+select pro_id,pro_name from products where pro_name like 'jet%'; % 表示任何字符出现任意次数
+select pro_id，pro_name from products where prod_name like '_ton anvil'; _ 只匹配一个字符
+
+正则表达式
+select pro_name from products where pro_name regexp '1000';基本字符匹配
+select pro_name from products where pro_name regexp '.000'; .匹配任意一个字符
+select pro_name from products where pro_name regexp '1000|2000';匹配两个字符
+select pro_name from products where pro_name regexp '[123]000'; [123]匹配1或2或3
+[1-6]匹配范围 
+select pro_name from products where pro_name regexp '\\.';匹配特殊字符. 
+\\f:换页;\\n:换行;\\r:回车;\\t:制表;\\v:纵向制表
+字符类
+[:alnum:] 任意字母和数字，同[a-zA-Z0-9]
+[:alpha:] 任意字符，同[a-zA-Z]
+[:blank:] 空格和制表，同[\\t]
+[:space:] 包括空格在内的任意空白字符，同[\\f\\n\\r\\t\\v]
+[:cntrl:] ASCII控制字符,ASCII0-31和127
+[:digit:] 任意数字，同[0-9]
+[:print:] 任意可打印字符
+[:graph:] 同[:print:]相同，但不包括空格
+[:lower:] 任意小写字母，同[a-z]
+[:upper:] 任意大写字母，同[A-Z]
+[:xdigit:]  任意十六进制数字，同[a-fA-F0-9]
+元字符
+*:0个或多个匹配；+:1个或多个匹配；?:0个或1个匹配；{m,n}:匹配数目的范围；{n,}:不少于指定数目的匹配
+定位符
+^:文本的开始； $:文本的结尾；
+
+聚集函数
+avg()、sum()、min() max() count()
+
+分组
+select ven_id,count(*) as num_prods from products group by ven_id;
+select ven_id,count(*) as num_prods from products group by ven_id having count(*) >2;
+
+selct子句顺序
+select, from, where, group by, having, order by, limit
+
+插入数据
+insert into customers values('Lily','beijing');
+insert into customers(cust_name,cust_address) values('Lily','beijing'),('Lucy','tianjin');
+insert into customers(cust_name,cust_address) select cust_name,cust_address from custnew;
+
+更新
+update customers set cust_email=‘heddd@163.com’ where cust_id=1005;
+update customers set cust_email=‘heddd@163.com’,cust_name='zdd' where cust_id=1005;
+
+删除
+delete from customers where cust_id = 10006;
+
+
