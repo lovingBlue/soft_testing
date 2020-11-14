@@ -1,1 +1,137 @@
+HTML（HyperText Markup Language）
+  HTML 是指超文本标记语言
+  HTML 不是一种编程语言，而是一种标记语言
+  标记语言是一套标记标签
+  HTML 使用标记标签来描述网页
+  HTML 文档包含了HTML标签及文本内容
+  HTML 文档也叫做web页面
+  
+HTML 标签
+  HTML标签是由尖括号包围的关键词，比如<html>
+  HTML标签通常是成对出现的，比如 <b>和</b>
+  标签对中的第一个标签是开始标签，第二个标签为结束标签
+  
+HTML示例  
+<!DOCTYPE html>                
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+</head>
+<body>
+ 
+<h1>我的第一个标题</h1>
+ 
+<p>我的第一个段落。</p>
+ 
+</body>
+</html>
 
+
+HTML 标题
+<h1>这是一个标题</h1>
+.....
+<h6>这是一个标题</h6>
+
+HTML 段落
+<p>这是一个段落</p>
+
+HTML 链接
+<a href="https://www.baidu.com">这是一个链接</a>
+
+HTML 图像
+<img loading="lazy" src="/images/logo.png" width="258" height="39" />
+
+HTML 换行
+<br />
+
+HTML 水平线
+<hr />
+
+HTML 注释
+<!--这是一个注释-->
+
+HTML 属性
+<p id="name" style="text-align:center;">这是一个段落</p>
+上面例子中id,style为属性；大多数HTML元素属性有class,id,style,title;其他：https://www.runoob.com/tags/ref-standardattributes.html
+
+HTML 表格
+<table border="1">
+  <tr>
+      <th>Header1</th>
+      <th>Header2</th>
+   </tr>
+  <tr>
+      <td>row 1,cell 1</td>
+      <td>row 1,cell 2</td>
+   </tr>
+   <tr>
+      <td>row 2,cell 1</td>
+      <td>row 2,cell 2</td>
+   </tr>
+ </table>
+ 其中表格的表头由<th>标签定义，行由<tr>(tr:table row)标签定义，每行的单元格由<td>(td:table data)标签定义
+ 属性border="1"代表表格有边框，若值为0代表没有边框
+ 
+ HTML 列表
+ 
+ 无序列表
+ <ul>
+ <li>coffee</li>
+ <li>tea</li>
+ </ul>
+ 标签<ul>(unordered list)代表无序列表,标签<li>(list item)代表列表项
+ 
+ 有序列表
+ <ol>
+ <li>coffee</li>
+ <li>tea</li>
+ </ol>
+ 标签<ol>(ordered list)代表有序列表
+ 
+ 自定义列表
+ <dl>
+ <dt>coffee</dt>
+ <dd>--black hot drink</dd>
+ <dt>milk</dt>
+ <dd>--white hot drink</dd>
+ </dl>
+ 标签<dl>(definition list)代表自定义列表；<dt>(definition term)代表自定义列表项;<dd>(definition description)代表自定义列表项的定义;
+
+
+HTML 区块元素
+标签<div>代表块级元素，浏览器会在其前后显示折行，可以包含其他标签
+标签<span>可以和<div>组合使用，可用作文本的容器
+
+HTML 表单
+<form>
+First name: <input type="text" name="firstname"><br>
+Last name: <input type="text" name="lastname">
+</form>
+标签<form>代表表单，标签<input>代表输入，type为text代表文本输入
+
+单选按钮
+<input type="radio" name="sex" value="male">Male<br/>
+<input type="radio" name="sex" value="female">Female<br/>
+
+复选框
+<input type="checkbox" name="vehicle" value="Bike">Bike<br/>
+<input type="checkbox" name="vehicle" value="Car">Car<br/>
+
+提交按钮
+<input type="submit" value="Submit">
+
+下拉列表
+<select name="cars">
+<option value="volvo">Volvo</option>
+<option value="saab">Saab</option>
+<option value="fiat">Fiat</option>
+<option value="audi">Audi</option>
+</select>
+
+HTML 脚本
+<script>标签用来定义脚本
+例子：
+<script>
+document.write("<p>这是一个段落。</p>");
+</script>
