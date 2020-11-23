@@ -1,0 +1,43 @@
+查看所有键：keys *
+127.0.0.1:6379> keys *
+1) "java"
+2) "python"
+
+键总数：dbsize
+127.0.0.1:6379> dbsize
+(integer) 4
+
+检查键是否存在：exists key (返回 1 代表存在；0 代表不存在)
+127.0.0.1:6379> exists python
+(integer) 1
+127.0.0.1:6379> exists math
+(integer) 0
+
+删除键：del key (返回结果为成功删除键的个数)
+127.0.0.1:6379> del python
+(integer) 1
+127.0.0.1:6379> del java php
+(integer) 2
+
+键过期：expire key seconds
+127.0.0.1:6379> set hello world
+OK
+127.0.0.1:6379> expire hello 10
+(integer) 1
+可以通过ttl命令观察键的剩余过期时间，若返回-2代表已删除
+127.0.0.1:6379> ttl hello
+(integer) 3
+127.0.0.1:6379> ttl hello
+(integer) -2
+127.0.0.1:6379> exists hello
+(integer) 0
+
+键的数据类型：type key
+127.0.0.1:6379> set hello world
+OK
+127.0.0.1:6379> type hello
+string
+127.0.0.1:6379> rpush mylist a b c d
+(integer) 4
+127.0.0.1:6379> type mylist
+list
