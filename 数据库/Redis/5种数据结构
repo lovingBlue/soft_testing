@@ -1,1 +1,135 @@
+字符串
+
+简介：
+字符串类型是Redis最基础的数据类型。首先键都是字符串类型，而且其他几种数据结构都是在字符串类型基础上构建的。
+字符串类型的值可以是字符串(简单字符串、JSON、XML)、数字(整数、浮点数)、甚至是二进制(图片、视频、音频)，但是值最大不能超过512MB
+
+命令：
+1.设置值
+set key value [EX seconds] [PX milliseconds] [NX|XX]
+set 命令的几个选项 
+。ex seconds:设置过期时间
+。px millseconds:为键设置毫秒级别过期时间
+。nx:键必须不存在，才可以设置成功；否则不成功
+。xx:键必须存在，才能设置成功，用于更新
+
+Redis还提供 setex 和 setnx 两个命令：
+setex key seconds value
+setnx key value
+127.0.0.1:6379> set hello world
+OK
+因为键hello已存在，所以setnx hello失败，返回结果为0
+127.0.0.1:6379> setnx hello value
+(integer) 0
+因为键hello已存在，所以set xx成功，返回结果为OK
+127.0.0.1:6379> set hello value xx
+OK
+
+setnx 和 setxx 使用场景：
+由于Redis的单线程命令处理机制，如果有多个客户端同时执行setnx key value,根据setnx 的特性只有一个客户端能设置成功，setnx 可以作为分布式锁的一种实现方案，Redis官方给出了使用setnx实现分布
+式锁的方法：http://redis.io/topics/distlock
+
+2.获取值
+get key
+127.0.0.1:6379> get hello
+"value"
+127.0.0.1:6379> get java
+(nil)
+
+3.批量设置值
+mset key value [key value ...]
+127.0.0.1:6379> mset a 1 b 2 c 3 d 4
+OK
+
+4.批量获取值
+ mget key [key ...]
+ 127.0.0.1:6379> mget a b c d
+1) "1"
+2) "2"
+3) "3"
+4) "4"
+127.0.0.1:6379> mget a b c f
+1) "1"
+2) "2"
+3) "3"
+4) (nil)
+
+5.计数
+incr key
+incr 命令用于对值做自增操作，返回结果分为三种情况：
+。值不是整数，返回错误
+。值是整数，返回自增后的结果
+。键不存在，按照值为0自增，返回结果为1
+127.0.0.1:6379> incr hello
+(error) ERR value is not an integer or out of range
+127.0.0.1:6379> incr a
+(integer) 2
+127.0.0.1:6379> exists my
+(integer) 0
+127.0.0.1:6379> incr my
+(integer) 1
+
+内部编码
+字符串类型的内部编码有3种：
+。int:8个字节的长整型
+。embstr:小于等于39个字节的字符串
+。raw:大于39个字节的字符串
+Redis会根据当前值的类型和长度决定使用哪种内部编码实现
+
+整数类型示例如下
+127.0.0.1:6379> set key 8653 xx
+OK
+127.0.0.1:6379> object encoding key
+"int"
+
+短字符串示例如下
+127.0.0.1:6379> set key "hello,world" xx
+OK
+127.0.0.1:6379> object encoding key
+"embstr"
+
+长字符串示例如下
+127.0.0.1:6379> set key "dheieiieiedhdheeieieieiieieieiieieieieiieieieieiieeieiieieeieiieie" xx
+OK
+127.0.0.1:6379> object encoding key
+"raw"
+127.0.0.1:6379> strlen key
+(integer) 66
+
+使用场景
+1.缓存功能
+Redis作为缓存层，首先从Redis获取信息，若没有再从数据库中获取，伪代码如下
+def get_user_info(id):
+  user_key = "user:info:" + id
+  value = redis.get(user_key)
+  if not value:
+    user_info = deserialize(value)
+  else:
+    user_info = mysql.get(id)
+    if not user_info:
+      redis.setnx(user_key,3600,serialize(user_info))
+  return user_info
+提示：Redis没有对键名有强制要求，但为了防止键冲突和项目的可维护性，比较推荐的方式是使用“业务名:对象名:id:属性”作为键名
+
+2.计数
+许多应用都会使用Redis作为计数的基础工具，它可以实现快速计数、查询缓存的功能，同样数据可以异步落地到其他数据源。例如视频播放数系统就是使用Redis作为视频播放数计数的基础组件，用户每播放一次视频，
+相应的视频播放数就会自增1：
+def incr_video_counter(id):
+  key = "video:playCount" + id
+  return redis.incr(key)
+
+3.共享session
+一个分布式 web 服务将用户的session 信息保存在各自服务器中，这样会造成用户刷新一次访问可能需要重新登录。为了解决这个问题，可以使用Redis将用户的session集中管理。在这种模式下，只要保证Redis是
+高可用和扩展性的，每次用户更新或者查询登录信息都直接从Redis中集中获取
+
+4.限速
+很多应用出于安全的考虑，会在每次进行登录时，让用户输入手机验证码，从而确定是否为用户本人。但是为了短信接口不被频繁访问，会限制用户每分钟获取验证码的频率，例如一分钟不能超过5次。此功能可以使用Redis
+来实现，下面的伪代码给出了基本实现思路：
+phone = “138xxxxxxxx”
+key = "shortMsg:limit:"+ phone
+is_exists = redis.get(key,1,"EX 60","NX")
+if is_exists != None or redis.incr(key)<=5:
+  #通过
+else:
+  # 限速
 
